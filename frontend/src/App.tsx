@@ -32,11 +32,11 @@ const handler = (e: React.SubmitEvent<HTMLFormElement>) => {
     } 
     const  message=JSON.stringify(obj)
     if(wsRef.current){
-      wsRef.current.onopen=()=>{
-        wsRef.current?.send(message)
-        alert("U have sent the message for creating room!!")
-      }
+      wsRef.current?.send(message);
+     
     }
+    nameRef.current.value=""
+  roomRef.current.value=""
     
   }
 };
