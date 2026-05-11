@@ -1,0 +1,69 @@
+import { motion } from "motion/react";
+
+import { useRef } from "react";
+import { BsSend } from "react-icons/bs";
+import { useParams } from "react-router";
+interface Props{
+    socket:WebSocket | null,
+    message:string[],
+    setMessage:(val:string)=>void
+}
+
+export const ChatApp=({socket,message,setMessage}:Props)=>{
+ const { room, name } = useParams();
+const inputRef=useRef<HTMLInputElement|null>(null)
+const handler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  e.preventDefault();
+  if (inputRef.current) {
+     let obj = {
+       type: "chat",
+       payload: {
+         username:name ,
+         roomId:room,
+         message:inputRef.current.value
+       },
+     };
+     const message = JSON.stringify(obj);
+    socket?.send(message);
+    // setMessage(prev=>[...prev,inputRef.current?.value || "")--->Type of this?
+    // @ts-ignore
+    setMessage(inputRef.current.value)
+   
+    inputRef.current.value = "";
+  }
+};
+    return (
+      <div className="h-screen bg-black flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.5, duration: 1 }}
+          className="w-180 mx-auto flex flex-col  border border-white shadow shadow-pink-300   gap-4 h-100 bg-gray-500 p-4  justify-center rounded-lg"
+        >
+          <div className="flex flex-col flex-1 gap-2">
+            {message.map((mes) => {
+              return (
+                <div
+                  key={mes}
+                  className="w-[40%] h-8  bg-white/90 rounded-md shadow drop-shadow-black py-2 px-1 "
+                >
+                  {mes}
+                </div>
+              );
+            })}
+          </div>
+          <div className="w-full flex justify-between items-center gap-2 p-2 mb-1 mt-1">
+            <input
+              className=" w-full py-3 px-1 bg-gray-700 text-white/80 outline-none focus:border focus:border-gray-600 flex rounded-lg"
+              type="text"
+              placeholder="Enter messages..."
+              ref={inputRef}
+            />
+            <button className="border p-1" onClick={handler}>
+              <BsSend />
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    );
+}
