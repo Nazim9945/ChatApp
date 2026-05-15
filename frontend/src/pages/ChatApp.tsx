@@ -34,13 +34,16 @@ const handler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 };
     return (
       <div className="h-screen bg-black flex items-center justify-center">
+        <div className="absolute right-5 top-10 h-14 w-14 rounded-full border-2 border-white/90 p-8 flex items-center justify-center bg-gray-500">
+         <span className="font-bold text-2xl  text-yellow-100">{name?.substring(0,2).toUpperCase() || "UK"}</span>
+        </div> 
         <motion.div
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5, duration: 1 }}
           className="w-180 mx-auto flex flex-col  border border-white shadow shadow-pink-300   gap-4 h-100 bg-gray-500 p-4  justify-center rounded-lg"
         >
-          <div className="flex flex-col flex-1 gap-2">
+          <div className="h-[80%] flex flex-col  gap-2 overflow-hidden scroll">
             {message.map((mes) => {
               return (
                 <div
@@ -52,7 +55,7 @@ const handler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
               );
             })}
           </div>
-          <div className="w-full flex justify-between items-center gap-2 p-2 mb-1 mt-1">
+          <div className="w-full flex justify-between items-center gap-2 p-2 mb-1 mt-2">
             <input
               className=" w-full py-3 px-1 bg-gray-700 text-white/80 outline-none focus:border focus:border-gray-600 flex rounded-lg"
               type="text"

@@ -30,7 +30,9 @@ wss.on("connection", (socket: WebSocket) => {
       const arr: User[] = allSockets.get(roomId) || [];
 
       arr.map((data) => {
-        data.socket.send(JSON.stringify(parsed));
+        if(data.socket!=socket){
+          data.socket.send(JSON.stringify(parsed));
+        }
       });
     }
 
