@@ -3,16 +3,21 @@ import HomePage from "./pages/HomePage"
 import { ChatApp } from "./pages/ChatApp";
 import { useEffect,  useState } from "react";
 
+export interface User{
+  username:string,
+  roomId:string,
+  message:string
+}
 
 function App(){
-  const[message,setMessage]=useState<string[]>([])
+  const[message,setMessage]=useState<User[]>([])
   const [socket,setSocket] = useState<WebSocket | null>(null);
   useEffect(() => {
     const ws = new WebSocket("http://localhost:8080");
     setSocket(ws)
     ws.onmessage = (event) => {
       const parsed = JSON.parse(event.data) 
-      const message=parsed.payload.message
+      const message=parsed.payload
       console.log(parsed);
       setMessage(prev=>[...prev,message])
       // token
@@ -33,7 +38,7 @@ function App(){
   //       };
   //     }
   // },[message])
-const handler=(message:string)=>{
+const handler=(message:User)=>{
     setMessage(prev=>[...prev,message])
 }
   return (

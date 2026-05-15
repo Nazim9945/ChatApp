@@ -3,10 +3,11 @@ import { motion } from "motion/react";
 import { useEffect, useRef } from "react";
 import { BsSend } from "react-icons/bs";
 import { useParams } from "react-router";
+import type { User } from "../App";
 interface Props{
     socket:WebSocket | null,
-    message:string[],
-    setMessage:(val:string)=>void
+    message:User[],
+    setMessage:(val:User)=>void
 }
 
 export const ChatApp=({socket,message,setMessage}:Props)=>{
@@ -28,7 +29,8 @@ const handler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     socket?.send(message);
     // setMessage(prev=>[...prev,inputRef.current?.value || "")--->Type of this?
     // @ts-ignore
-    setMessage(inputRef.current.value)
+    // setMessage(inputRef.current.value)
+    setMessage(obj.payload)
    
     inputRef.current.value = "";
   }
@@ -47,14 +49,14 @@ useEffect(()=>{
           transition={{ delay: 0.5, duration: 1 }}
           className="w-180 mx-auto flex flex-col  border border-white shadow shadow-pink-300   gap-4 h-100 bg-gray-500 p-4  justify-center rounded-lg"
         >
-          <div className="h-[80%] flex flex-col  gap-2 overflow-x-scroll bg-yellow-200 no-scrollbar py-2">
+          <div className="h-[80%] flex flex-col  gap-2 overflow-x-scroll  no-scrollbar py-2 relative">
             {message.map((mes,index) => {
               return (
                 <div
                   key={index}
-                  className="max-w-[40%] bg-white/90 wrap-break-word rounded-md shadow drop-shadow-black py-2 px-1"
+                  className={`relative max-w-[40%]  wrap-break-word rounded-md shadow drop-shadow-black py-2 px-1 ${mes.username===name ? 'self-end bg-blue-700 text-white' : 'self-start bg-yellow-300 '}`}
                 >
-                  {mes}
+                  {mes.message}
                 </div>
               );
             })}
