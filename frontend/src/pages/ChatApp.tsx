@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { BsSend } from "react-icons/bs";
 import { useParams } from "react-router";
 interface Props{
@@ -10,6 +10,7 @@ interface Props{
 }
 
 export const ChatApp=({socket,message,setMessage}:Props)=>{
+  const bottomRef=useRef<HTMLDivElement | null>(null)
  const { room, name } = useParams();
 const inputRef=useRef<HTMLInputElement|null>(null)
 const handler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -32,6 +33,9 @@ const handler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     inputRef.current.value = "";
   }
 };
+useEffect(()=>{
+ bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+},[message])
     return (
       <div className="h-screen bg-black flex items-center justify-center">
         <div className="absolute right-5 top-10 h-14 w-14 rounded-full border-2 border-white/90 p-8 flex items-center justify-center bg-gray-500">
@@ -44,16 +48,17 @@ const handler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
           className="w-180 mx-auto flex flex-col  border border-white shadow shadow-pink-300   gap-4 h-100 bg-gray-500 p-4  justify-center rounded-lg"
         >
           <div className="h-[80%] flex flex-col  gap-2 overflow-x-scroll bg-yellow-200 no-scrollbar py-2">
-            {message.map((mes) => {
+            {message.map((mes,index) => {
               return (
                 <div
-                  key={mes}
+                  key={index}
                   className="max-w-[40%] bg-white/90 wrap-break-word rounded-md shadow drop-shadow-black py-2 px-1"
                 >
                   {mes}
                 </div>
               );
             })}
+            <div ref={bottomRef}></div>
           </div>
           <div className="w-full flex justify-between items-center gap-2 p-2 mb-1 mt-2">
             <input
