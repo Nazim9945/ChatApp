@@ -57,7 +57,7 @@ useEffect(()=>{
               return (
                 <div
                   key={index}
-                  className={`relative max-w-[40%]  wrap-break-word rounded-md shadow drop-shadow-black py-2 px-1 ${mes.username === name ? "self-end bg-blue-700 text-white" : "self-start bg-yellow-300 "}`}
+                  className={` max-w-[40%] min-w-[5%]  wrap-break-word rounded-md shadow drop-shadow-black py-2 px-1 ${mes.username === name ? "self-end bg-blue-700 text-white" : "self-start bg-yellow-300 "}`}
                 >
                   {mes.message}
                 </div>
