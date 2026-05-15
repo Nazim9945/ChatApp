@@ -43,12 +43,12 @@ const handler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
           transition={{ delay: 0.5, duration: 1 }}
           className="w-180 mx-auto flex flex-col  border border-white shadow shadow-pink-300   gap-4 h-100 bg-gray-500 p-4  justify-center rounded-lg"
         >
-          <div className="h-[80%] flex flex-col  gap-2 overflow-hidden scroll">
+          <div className="h-[80%] flex flex-col  gap-2 overflow-x-scroll bg-yellow-200 no-scrollbar py-2">
             {message.map((mes) => {
               return (
                 <div
                   key={mes}
-                  className="w-[40%] h-8  bg-white/90 rounded-md shadow drop-shadow-black py-2 px-1 "
+                  className="max-w-[40%] bg-white/90 wrap-break-word rounded-md shadow drop-shadow-black py-2 px-1"
                 >
                   {mes}
                 </div>
