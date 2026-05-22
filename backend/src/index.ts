@@ -22,7 +22,12 @@ wss.on("connection", (socket: WebSocket, req: any) => {
       if (!allSockets.has(roomId)) {
         allSockets.set(roomId, [{ socket, username }]);
       } else {
-        allSockets.get(roomId)?.push({ socket, username });
+        const all=allSockets.get(roomId)
+        const isExist=all?.find(soc=>soc.socket===socket)
+        if(!isExist){
+
+          all?.push({ socket, username });
+        }
       }
       console.log("joined the room!!");
       const sockets=allSockets.get(roomId)
