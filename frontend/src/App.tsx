@@ -44,7 +44,7 @@ const handler=(message:User)=>{
   return (
     <Routes>
       <Route path="/" element={<HomePage socket={socket}/>} />
-      <Route path="/username/:name/room/:room" element={<ChatApp message={message} setMessage={handler}  socket={socket}/>} />
+      <Route path="/chat" element={<ChatApp message={message} setMessage={handler}  socket={socket}/>} />
     </Routes>
   );
 }

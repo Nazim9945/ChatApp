@@ -2,8 +2,9 @@ import { motion } from "motion/react";
 
 import { useEffect, useRef } from "react";
 import { BsSend } from "react-icons/bs";
-import { useParams } from "react-router";
+
 import type { User } from "../App";
+import { useChatCtx } from "../store/contextApi";
 interface Props{
     socket:WebSocket | null,
     message:User[],
@@ -12,7 +13,8 @@ interface Props{
 
 export const ChatApp=({socket,message,setMessage}:Props)=>{
   const bottomRef=useRef<HTMLDivElement | null>(null)
- const { room, name } = useParams();
+
+const{name,room}=useChatCtx()
 const inputRef=useRef<HTMLInputElement|null>(null)
 const handler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
   e.preventDefault();
