@@ -4,14 +4,17 @@ import {  createContext, useContext, useState, type ReactNode } from "react";
 interface Props{
     name:string,
     room:string,
+    totalUser:number,
     nameHandler:(val:string)=>void,
-    roomHandler:(val:string)=>void
+    roomHandler:(val:string)=>void,
+    totalUserHandler:(val:number)=>void
 }
 export const chatctx=createContext<Props | null>(null)
 
 const ChatProvider=({children}:{children:ReactNode})=>{
     const [name,setName]=useState("");
     const[room,setRoom]=useState("");
+    const[totalUser,setTotalUser]=useState<number>(0)
 
     const roomHandler=(val:string)=>{
         setRoom(val)
@@ -19,7 +22,10 @@ const ChatProvider=({children}:{children:ReactNode})=>{
     const nameHandler = (val: string) => {
       setName(val);
     };
-    return <chatctx.Provider value={{name,room,roomHandler,nameHandler}}>
+    const totalUserHandler = (val: number) => {
+      setTotalUser(val)
+    };
+    return <chatctx.Provider value={{name,room,roomHandler,nameHandler,totalUserHandler,totalUser}}>
         {children}
     </chatctx.Provider>
 }

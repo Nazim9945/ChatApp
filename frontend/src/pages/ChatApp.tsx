@@ -14,7 +14,7 @@ interface Props{
 export const ChatApp=({socket,message,setMessage}:Props)=>{
   const bottomRef=useRef<HTMLDivElement | null>(null)
 
-const{name,room}=useChatCtx()
+const{name,room,totalUser}=useChatCtx()
 const inputRef=useRef<HTMLInputElement|null>(null)
 const handler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
   e.preventDefault();
@@ -52,9 +52,15 @@ useEffect(()=>{
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5, duration: 1 }}
-          className="w-180 mx-auto flex flex-col  border border-white shadow shadow-pink-300   gap-4 h-100 bg-gray-500 p-4  justify-center rounded-lg"
+          className="w-180 mx-auto flex flex-col  border border-white shadow shadow-pink-300   gap-4 h-120 bg-gray-500 p-4  justify-center rounded-lg"
         >
-          <div className="h-[80%] flex flex-col  gap-2 overflow-x-scroll  no-scrollbar py-2 relative">
+          <div className="h-10 border border-white shadow shadow-pink-300   gap-4  bg-white p-4  justify-between flex items-center rounded-lg">
+            <div className="space-x-2">RoomId: <span>{room}</span></div>
+            <div className="space-x-2">
+              User:<span>{totalUser}</span>
+            </div>
+          </div>
+          <div className="h-[80%] flex flex-col  gap-2 overflow-y-scroll  no-scrollbar py-2 relative">
             {message.map((mes, index) => {
               return (
                 <div
@@ -75,9 +81,8 @@ useEffect(()=>{
               ref={inputRef}
               required
               onKeyDown={(e) => {
-                
-                if(e.key==='Enter'){
-                  e.preventDefault()
+                if (e.key === "Enter") {
+                  e.preventDefault();
                   if (!inputRef.current?.value) return;
                   if (inputRef.current) {
                     let obj = {
@@ -90,7 +95,7 @@ useEffect(()=>{
                     };
                     const message = JSON.stringify(obj);
                     socket?.send(message);
-                  //  @ts-ignore
+                    //  @ts-ignore
                     setMessage(obj.payload);
 
                     inputRef.current.value = "";

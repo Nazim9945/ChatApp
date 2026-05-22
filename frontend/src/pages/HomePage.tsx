@@ -17,7 +17,7 @@ const {name,nameHandler,room,roomHandler}=useChatCtx()
   const navigate=useNavigate()
   const handler = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // if(!nameRef.current?.value || !roomRef.current?.value) return;
+   
     if(!name || !room) return;
     
     

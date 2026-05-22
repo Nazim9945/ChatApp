@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router"
 import HomePage from "./pages/HomePage"
 import { ChatApp } from "./pages/ChatApp";
 import { useEffect,  useState } from "react";
+import { useChatCtx } from "./store/contextApi";
 
 export interface User{
   username:string,
@@ -10,6 +11,7 @@ export interface User{
 }
 
 function App(){
+  const{totalUserHandler}=useChatCtx()
   const[message,setMessage]=useState<User[]>([])
   const [socket,setSocket] = useState<WebSocket | null>(null);
   useEffect(() => {
@@ -17,9 +19,14 @@ function App(){
     setSocket(ws)
     ws.onmessage = (event) => {
       const parsed = JSON.parse(event.data) 
-      const message=parsed.payload
+      if(parsed.type=='join' || parsed.type=='leave'){
+          totalUserHandler(parsed.noOfUserInRoom)
+      }
+     else{
+       const message=parsed.payload
       console.log(parsed);
       setMessage(prev=>[...prev,message])
+     }
       // token
     };
     return ()=>{

@@ -18,13 +18,28 @@ wss.on("connection", (socket: WebSocket, req: any) => {
     if (parsed.type === "join") {
       const roomId = parsed.payload.roomId;
       const username = parsed.payload.username;
-
+      
       if (!allSockets.has(roomId)) {
         allSockets.set(roomId, [{ socket, username }]);
       } else {
         allSockets.get(roomId)?.push({ socket, username });
       }
       console.log("joined the room!!");
+      const sockets=allSockets.get(roomId)
+      sockets?.forEach(soc=>{
+        soc.socket.send(
+          JSON.stringify({
+            type: "join",
+            noOfUserInRoom: sockets?.length,
+          }),
+        );
+      })
+      // socket.send(
+      //   JSON.stringify({
+      //     type: "join",
+      //     noOfUserInRoom: allSockets.get(roomId)?.length,
+      //   }),
+      // );
     }
     if (parsed.type === "chat") {
       const roomId = parsed.payload.roomId;
@@ -43,18 +58,28 @@ wss.on("connection", (socket: WebSocket, req: any) => {
       });
     }
 
-    if (parsed.type === "leave") {
-      const roomId = parsed.payload.roomId;
-      let arr: User[] = allSockets.get(roomId) || [];
-      if (arr.length == 0) {
-        allSockets.delete(roomId);
-      } else {
-        arr = arr.filter((soc) => soc.socket != socket);
-        allSockets.set(roomId, arr);
-      }
-    }
+  
+    socket.on("close", () => {
+       const roomId = parsed.payload.roomId;
+       let arr: User[] = allSockets.get(roomId) || [];
+       if (arr.length == 0) {
+         allSockets.delete(roomId);
+       } else {
+         arr = arr.filter((soc) => soc.socket != socket);
+         allSockets.set(roomId, arr);
+       }
+       const sockets = allSockets.get(roomId);
+       sockets?.forEach((soc) => {
+         soc.socket.send(
+           JSON.stringify({
+             type: "leave",
+             noOfUserInRoom: sockets?.length,
+           }),
+         );
+       });
+     
+      console.log("disconnecting");
+    });
   });
-  socket.on("close", () => {
-    console.log("disconnecting");
-  });
+  
 });
