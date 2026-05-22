@@ -3,7 +3,10 @@ import HomePage from "./pages/HomePage"
 import { ChatApp } from "./pages/ChatApp";
 import { useEffect,  useState } from "react";
 import { useChatCtx } from "./store/contextApi";
+import popup from './assets/popup.mp3'
 
+const audioPopup=new Audio(popup)
+audioPopup.volume=1
 export interface User{
   username:string,
   roomId:string,
@@ -23,9 +26,11 @@ function App(){
           totalUserHandler(parsed.noOfUserInRoom)
       }
      else{
+      audioPopup.pause()
        const message=parsed.payload
       console.log(parsed);
       setMessage(prev=>[...prev,message])
+      audioPopup.play()
      }
       // token
     };
@@ -46,7 +51,9 @@ function App(){
   //     }
   // },[message])
 const handler=(message:User)=>{
+  
     setMessage(prev=>[...prev,message])
+    audioPopup.play();
 }
   return (
     <Routes>
