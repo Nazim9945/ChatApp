@@ -18,7 +18,7 @@ function App(){
   const[message,setMessage]=useState<User[]>([])
   const [socket,setSocket] = useState<WebSocket | null>(null);
   useEffect(() => {
-    const ws = new WebSocket("http://localhost:8080");
+    const ws = new WebSocket(import.meta.env.VITE_WS_URL as string);
     setSocket(ws)
     ws.onmessage = (event) => {
       const parsed = JSON.parse(event.data) 
